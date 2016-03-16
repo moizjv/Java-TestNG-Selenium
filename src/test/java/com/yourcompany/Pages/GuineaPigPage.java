@@ -31,7 +31,7 @@ public class GuineaPigPage extends PageBase {
 	private WebElement emailTextInput;
 
 	@FindBy(id="comments")
-	private WebElement commentsTextAreaInput;
+	public WebElement commentsTextAreaInput;
 
 	@FindBy(id="submit")
 	private WebElement submitButton;

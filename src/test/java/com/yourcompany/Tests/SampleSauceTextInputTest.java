@@ -6,8 +6,10 @@ import com.yourcompany.Tests.SampleSauceTestBase;
 import com.yourcompany.Utils.Statistics;
 import org.junit.Test;
 import org.omg.CORBA.SystemException;
+import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -69,11 +71,9 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
 
         WebDriver driver = createDriver(browser, version, os, method.getName());
 
-        driver.get("https://saucelabs.com/test/guinea-pig");
-
         // Navigate to the page
         Long startTime = System.nanoTime();
-        GuineaPigPage page = GuineaPigPage.getPage(driver);
+        driver.get("https://saucelabs.com/test/guinea-pig");
         double time = (System.nanoTime() - startTime)/1000000;
         if (this.execTimes.containsKey("page_load")) {
             this.execTimes.get("page_load").add(time);
@@ -87,36 +87,60 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
              which interacts with the email input field element by sending text to it.
         */
         startTime = System.nanoTime();
-        page.enterCommentText(commentInputText);
+        WebElement comments = driver.findElement(By.id("comments"));
         time = (System.nanoTime() - startTime)/1000000;
-        if (this.execTimes.containsKey("enter_comments")) {
-            this.execTimes.get("enter_comments").add(time);
+        if (this.execTimes.containsKey("comments_find_by_id")) {
+            this.execTimes.get("comments_find_by_id").add(time);
         } else {
-            this.execTimes.put("enter_comments", new ArrayList<>(Arrays.asList(time)));
+            this.execTimes.put("comments_find_by_id", new ArrayList<>(Arrays.asList(time)));
         }
-
 
         startTime = System.nanoTime();
-        page.submitForm();
+        comments.sendKeys(commentInputText);
         time = (System.nanoTime() - startTime)/1000000;
-        if (this.execTimes.containsKey("submit_form")) {
-            this.execTimes.get("submit_form").add(time);
+        if (this.execTimes.containsKey("comments_send_text")) {
+            this.execTimes.get("comments_send_text").add(time);
         } else {
-            this.execTimes.put("submit_form", new ArrayList<>(Arrays.asList(time)));
-        }
-        /*
-         Assertions should be part of test and not part of Page object.
-         Each test should be verifying one piece of functionality (atomic testing)
-        */
-        startTime = System.nanoTime();
-        assertTrue(page.getSubmittedCommentText().endsWith(commentInputText));
-        time = (System.nanoTime() - startTime)/1000000;
-        if (this.execTimes.containsKey("check_comments")) {
-            this.execTimes.get("check_comments").add(time);
-        } else {
-            this.execTimes.put("check_comments", new ArrayList<>(Arrays.asList(time)));
+            this.execTimes.put("comments_send_text", new ArrayList<>(Arrays.asList(time)));
         }
 
+        startTime = System.nanoTime();
+        WebElement button = driver.findElement(By.id("submit"));
+        time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("button_find_by_id")) {
+            this.execTimes.get("button_find_by_id").add(time);
+        } else {
+            this.execTimes.put("button_find_by_id", new ArrayList<>(Arrays.asList(time)));
+        }
+
+        startTime = System.nanoTime();
+        button.click();
+        time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("button_click")) {
+            this.execTimes.get("button_click").add(time);
+        } else {
+            this.execTimes.put("button_click", new ArrayList<>(Arrays.asList(time)));
+        }
+
+        startTime = System.nanoTime();
+        WebElement submittedComments = driver.findElement(By.id("your_comments"));
+        time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("submitted_comments_find_by_id")) {
+            this.execTimes.get("submitted_comments_find_by_id").add(time);
+        } else {
+            this.execTimes.put("submitted_comments_find_by_id", new ArrayList<>(Arrays.asList(time)));
+        }
+
+        startTime = System.nanoTime();
+        String submittedCommentsText = submittedComments.getText();
+        time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("submitted_comments_get_text")) {
+            this.execTimes.get("submitted_comments_get_text").add(time);
+        } else {
+            this.execTimes.put("submitted_comments_get_text", new ArrayList<>(Arrays.asList(time)));
+        }
+
+        assertTrue(submittedCommentsText.endsWith(commentInputText));
     }
 
     @BeforeClass
