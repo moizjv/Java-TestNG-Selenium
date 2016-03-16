@@ -3,14 +3,20 @@ package com.yourcompany.Tests;
 
 import com.yourcompany.Pages.*;
 import com.yourcompany.Tests.SampleSauceTestBase;
+import com.yourcompany.Utils.Statistics;
 import org.junit.Test;
+import org.omg.CORBA.SystemException;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.rmi.UnexpectedException;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -21,11 +27,13 @@ import static org.junit.Assert.*;
 
 public class SampleSauceTextInputTest extends SampleSauceTestBase {
 
+    HashMap<String, ArrayList<Double>> execTimes;
+
     /**
      * Runs a simple test verifying if the email input is functional.
      * @throws InvalidElementStateException
      */
-    @org.testng.annotations.Test(dataProvider = "hardCodedBrowsers")
+    //@org.testng.annotations.Test(dataProvider = "hardCodedBrowsers")
     public void verifyEmailInputTest(String browser, String version, String os, Method method)
             throws MalformedURLException, InvalidElementStateException, UnexpectedException {
         String emailInputText = "abc@gmail.com";
@@ -54,7 +62,7 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
      * Runs a simple test verifying if the comment input is functional.
      * @throws InvalidElementStateException
      */
-    @org.testng.annotations.Test(dataProvider = "hardCodedBrowsers")
+    @org.testng.annotations.Test(dataProvider = "hardCodedBrowsers", invocationCount = 20)
     public void verifyCommentInputTest(String browser, String version, String os, Method method)
             throws MalformedURLException, InvalidElementStateException, UnexpectedException {
         String commentInputText = UUID.randomUUID().toString();
@@ -64,19 +72,72 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
         driver.get("https://saucelabs.com/test/guinea-pig");
 
         // Navigate to the page
+        Long startTime = System.nanoTime();
         GuineaPigPage page = GuineaPigPage.getPage(driver);
+        double time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("page_load")) {
+            this.execTimes.get("page_load").add(time);
+        } else {
+
+            this.execTimes.put("page_load", new ArrayList<>(Arrays.asList(time)));
+        }
 
         /*
          enterCommentText page is an exposed "service",
              which interacts with the email input field element by sending text to it.
         */
+        startTime = System.nanoTime();
         page.enterCommentText(commentInputText);
+        time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("enter_comments")) {
+            this.execTimes.get("enter_comments").add(time);
+        } else {
+            this.execTimes.put("enter_comments", new ArrayList<>(Arrays.asList(time)));
+        }
 
+
+        startTime = System.nanoTime();
+        page.submitForm();
+        time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("submit_form")) {
+            this.execTimes.get("submit_form").add(time);
+        } else {
+            this.execTimes.put("submit_form", new ArrayList<>(Arrays.asList(time)));
+        }
         /*
          Assertions should be part of test and not part of Page object.
          Each test should be verifying one piece of functionality (atomic testing)
         */
-        assertEquals(commentInputText, page.getCommentText());
+        startTime = System.nanoTime();
+        assertTrue(page.getSubmittedCommentText().endsWith(commentInputText));
+        time = (System.nanoTime() - startTime)/1000000;
+        if (this.execTimes.containsKey("check_comments")) {
+            this.execTimes.get("check_comments").add(time);
+        } else {
+            this.execTimes.put("check_comments", new ArrayList<>(Arrays.asList(time)));
+        }
 
+    }
+
+    @BeforeClass
+    public void logSetup(){
+        this.execTimes = new HashMap<>();
+    }
+
+    @AfterClass
+    public void logTearDown(){
+        for (Map.Entry<String, ArrayList<Double>> me: this.execTimes.entrySet()){
+            String key = me.getKey();
+            ArrayList<Double> data = me.getValue();
+            Statistics stats = new Statistics(data);
+            System.out.println("start " + key + " data and statistics");
+            System.out.println(key + "-> Data: "  + data.toString());
+            System.out.println(key + "-> Mean: "  + Double.toString(stats.getMean()));
+            System.out.println(key + "-> StdDev: "  + Double.toString(stats.getStdDev()));
+            System.out.println(key + "-> Variance: "  + Double.toString(stats.getVariance()));
+            System.out.println(key + "-> Median: "  + Double.toString(stats.getMedian()));
+            System.out.println("end " + key + " data and statistics");
+
+        }
     }
 }

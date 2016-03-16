@@ -29,7 +29,7 @@ public class SampleSauceCheckBoxTest extends SampleSauceTestBase {
      * Runs a simple test verifying the checked checkbox state
      * @throws InvalidElementStateException
      */
-    @Test(dataProvider = "hardCodedBrowsers")
+    //@Test(dataProvider = "hardCodedBrowsers")
     public void verifyUncheckedCheckBoxInputTest(String browser, String version, String os, Method method)
             throws MalformedURLException, InvalidElementStateException, UnexpectedException {
 
@@ -60,7 +60,7 @@ public class SampleSauceCheckBoxTest extends SampleSauceTestBase {
      * Runs a simple test verifying the checked checkbox state
      * @throws InvalidElementStateException
      */
-    @Test(dataProvider = "hardCodedBrowsers", retryAnalyzer = RetryAnalyzer.class)
+    //@Test(dataProvider = "hardCodedBrowsers")
     public void verifyCheckedCheckBoxInputTest(String browser, String version, String os, Method method)
             throws MalformedURLException, InvalidElementStateException, UnexpectedException {
 

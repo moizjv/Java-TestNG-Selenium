@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.UnexpectedException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
@@ -69,11 +70,11 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider, Sauc
     @DataProvider(name = "hardCodedBrowsers", parallel = true)
     public static Object[][] sauceBrowserDataProvider(Method testMethod) {
         return new Object[][]{
-                new Object[]{"internet explorer", "11", "Windows 8.1"},
-                new Object[]{"chrome", "41", "Windows XP"},
-                new Object[]{"safari", "7", "OS X 10.9"},
-                new Object[]{"firefox", "35", "Windows 7"},
-                new Object[]{"opera", "12.12", "Windows 7"}
+                //new Object[]{"internet explorer", "11", "Windows 8.1"},
+                //new Object[]{"chrome", "41", "Windows XP"},
+                //new Object[]{"safari", "7", "OS X 10.9"},
+                new Object[]{"firefox", "latest", "Linux"},
+                //new Object[]{"opera", "12.12", "Windows 7"}
         };
     }
 
@@ -122,6 +123,7 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider, Sauc
         capabilities.setCapability(CapabilityType.VERSION, version);
         capabilities.setCapability(CapabilityType.PLATFORM, os);
         capabilities.setCapability("name", methodName);
+        capabilities.setCapability("seleniumVersion", "2.52.0");
 
         if (buildTag != null) {
             capabilities.setCapability("build", buildTag);
@@ -135,9 +137,9 @@ public class SampleSauceTestBase implements SauceOnDemandSessionIdProvider, Sauc
         // set current sessionId
         String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
         sessionId.set(id);
-
+        webDriver.get().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         // print out sessionId and jobname for consumption by Sauce Jenkins plugin
-        System.out.println(String.format("SauceOnDemandSessionID=%1$s job-name=%2$s", id, methodName));
+        //System.out.println(String.format("SauceOnDemandSessionID=%1$s job-name=%2$s", id, methodName));
 
         return webDriver.get();
     }
