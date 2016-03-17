@@ -64,7 +64,7 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
      * Runs a simple test verifying if the comment input is functional.
      * @throws InvalidElementStateException
      */
-    @org.testng.annotations.Test(dataProvider = "hardCodedBrowsers", invocationCount = 20)
+    @org.testng.annotations.Test(dataProvider = "hardCodedBrowsers", invocationCount = 100)
     public void verifyCommentInputTest(String browser, String version, String os, Method method)
             throws MalformedURLException, InvalidElementStateException, UnexpectedException {
         String commentInputText = UUID.randomUUID().toString();
