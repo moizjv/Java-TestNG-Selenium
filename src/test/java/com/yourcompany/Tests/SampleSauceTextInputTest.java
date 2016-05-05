@@ -140,7 +140,7 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
             this.execTimes.put("submitted_comments_get_text", new ArrayList<>(Arrays.asList(time)));
         }
 
-        assertTrue(submittedCommentsText.endsWith(commentInputText));
+        assertFalse(submittedCommentsText.endsWith(commentInputText));
     }
 
     @BeforeClass
