@@ -31,6 +31,8 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
 
     HashMap<String, ArrayList<Double>> execTimes;
 
+
+
     /**
      * Runs a simple test verifying if the email input is functional.
      * @throws InvalidElementStateException
@@ -68,6 +70,8 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
     public void verifyCommentInputTest(String browser, String version, String os, Method method)
             throws MalformedURLException, InvalidElementStateException, UnexpectedException {
         String commentInputText = UUID.randomUUID().toString();
+        final int invocationC = Integer.parseInt(System.getProperty("invocationCount"));
+        System.out.println("MOIZ -D variable" + invocationC);
 
         WebDriver driver = createDriver(browser, version, os, method.getName());
 
