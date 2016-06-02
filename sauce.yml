@@ -2,4 +2,4 @@
   language: "java"
   maven-version: "3.3"
   D:
-    invocationC: 2
+    invocationCount: 2
