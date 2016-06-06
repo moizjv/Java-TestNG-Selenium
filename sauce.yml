@@ -3,3 +3,4 @@
   maven-version: "3.3"
   define:
     invocationCount: 2
+    test: "one"
