@@ -72,6 +72,7 @@ public class SampleSauceTextInputTest extends SampleSauceTestBase {
         String commentInputText = UUID.randomUUID().toString();
         final int invocationC = Integer.parseInt(System.getProperty("invocationCount"));
         System.out.println("MOIZ -D variable" + invocationC);
+        System.out.println("MOIZ -D variable test" + System.getProperty("var2"));
 
         WebDriver driver = createDriver(browser, version, os, method.getName());
 
