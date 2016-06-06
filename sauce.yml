@@ -1,3 +1,5 @@
 ---
   language: "java"
   maven-version: "3.3"
+  define:
+  
